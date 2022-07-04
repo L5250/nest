@@ -1,11 +1,16 @@
 {
-    "build": {
-      "env": {
-        "ENABLE_FILE_SYSTEM_API": "1"
-      }
-    },
-    "rewrites": [
-      { "source": "/dist/:match*", "destination": "dist/:match*" }
+    "version": 2,
+    "name": "nestjs-blog",
+    "builds": [
+        {
+            "src": "dist/main.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "dist/main.js"
+        }
     ]
-  }
-  
+}
