@@ -3,7 +3,7 @@
  * @Description: 
  * @Date: 2022-07-01 15:12:40
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-05 16:42:42
+ * @LastEditTime: 2022-07-05 16:53:42
 -->
 nest-cli 添加
 `"generateOptions": { "spec": false }`
@@ -28,4 +28,26 @@ npx nest g f any-expection
 创建中间件
 npx nest g mi validata-data
 
-需要安装@vercel/node
+
+部署到vercel
+1.需要安装@vercel/node
+2.vercel.json 添加以下代码
+`{
+    "version": 2,
+    "name": "blog-server",
+    "builds": [
+        {
+            "src": "dist/main.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "dist/main.js"
+        }
+    ]
+}`
+3.npm run build
+4.npx vercle login
+5.npx vercel --prod
