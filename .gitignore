@@ -6,3 +6,5 @@ dist
 test
 prisma/dev.db
 .vercel
+
+package-lock.json
