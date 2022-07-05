@@ -2,12 +2,36 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
 }
 
+// datasource db {
+//   provider = "sqlite"
+//   url      = env("DATABASE_URL")
+// }
+
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model Link {
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  url       String
+  shortUrl  String
+  userId    String?
+}
+
+model User {
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  name      String?
+  email     String
 }
 
 model user {
@@ -18,6 +42,8 @@ model user {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  video   video?  @relation(fields: [videoId], references: [id])
+  videoId String?
   @@map("users")
 }
 
@@ -29,3 +55,14 @@ model book {
 
   @@map("books")
 }
+
+model video {
+  id        String   @id @unique @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  name      String   @default("")
+  url       String   @default("")
+
+  users user[]
+}
+
