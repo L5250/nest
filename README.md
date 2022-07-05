@@ -1,3 +1,10 @@
+<!--
+ * @Author: L5250
+ * @Description: 
+ * @Date: 2022-07-01 15:12:40
+ * @LastEditors: L5250
+ * @LastEditTime: 2022-07-05 16:42:42
+-->
 nest-cli 添加
 `"generateOptions": { "spec": false }`
 取消生成测试文件
@@ -20,3 +27,5 @@ npx nest g f any-expection
 
 创建中间件
 npx nest g mi validata-data
+
+需要安装@vercel/node

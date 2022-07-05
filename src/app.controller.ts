@@ -3,13 +3,14 @@
  * @Description:
  * @Date: 2022-07-01 15:12:40
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-04 11:35:26
+ * @LastEditTime: 2022-07-05 16:46:23
  */
 import { Controller, Get, Param, Post, Query, Res, Body } from '@nestjs/common';
 import { Response } from 'express';
 import { AppService } from './app.service';
 
-@Controller('app')
+@Controller('')
+// @Controller('app')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
