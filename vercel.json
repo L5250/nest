@@ -1,6 +1,4 @@
 {
-    "version": 2,
-    "name": "nestjs-blog",
     "builds": [
         {
             "src": "dist/main.js",
@@ -12,5 +10,8 @@
             "src": "/(.*)",
             "dest": "dist/main.js"
         }
-    ]
+    ],
+    "github": {
+        "enabled": false
+    }
 }
