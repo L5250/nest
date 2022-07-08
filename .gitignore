@@ -7,4 +7,5 @@ test
 prisma/dev.db
 .vercel
 
+documentation
 package-lock.json

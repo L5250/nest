@@ -1,40 +1,52 @@
 /*
  * @Author: L5250
  * @Description:
- * @Date: 2022-07-01 15:49:39
+ * @Date: 2022-07-06 10:20:55
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-01 16:03:20
+ * @LastEditTime: 2022-07-08 11:39:48
  */
-// 创建服务（service）-- npx g s 'name' --no-spec
-// --no-spec(不生成测试文件)
-import { Injectable } from '@nestjs/common';
-
-const people = [
-  {
-    id: 1,
-    name: 'user-1',
-  },
-  {
-    id: 2,
-    name: 'user-2',
-  },
-  {
-    id: 3,
-    name: 'user-3',
-  },
-  {
-    id: 4,
-    name: 'user-5',
-  },
-];
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
-  loadAll() {
-    return people;
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
-  loadById(id) {
-    return people.find((e) => e.id == id);
+  async findAll() {
+    return this.prisma.blogUser.findMany({ where: {} });
+  }
+  // 获取单个user
+  async getUserByName(userName: string) {
+    return this.prisma.blogUser.findUnique({ where: { userName } });
+  }
+  // 注册
+  async register(createUserDto: CreateUserDto) {
+    return this.prisma.blogUser.create({
+      data: createUserDto,
+    });
+  }
+  // 更新信息
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    return this.prisma.blogUser.update({
+      where: { id },
+      data: updateUserDto,
+    });
+  }
+  // 删除账号
+  async remove(id: string) {
+    return this.prisma.blogUser.delete({ where: { id } });
+  }
+  async login(params: any) {
+    if (!params.password) {
+      return false;
+    }
+    const data = await this.getUserByName(params.userName);
+    if (data.password !== params.password) {
+      throw new HttpException('验证密码账号', HttpStatus.FORBIDDEN);
+      return false;
+    }
+    return data;
   }
 }

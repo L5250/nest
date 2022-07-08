@@ -1,33 +1,58 @@
 /*
  * @Author: L5250
  * @Description:
- * @Date: 2022-07-01 15:29:26
+ * @Date: 2022-07-06 10:20:55
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-01 16:47:27
+ * @LastEditTime: 2022-07-08 17:18:44
  */
-// npx g -h 帮助
-// 创建控制器（service）-- npx g co 'name' --no-spec
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { UserService } from './user.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('/user')
+@ApiTags('user')
+@Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  @Get()
-  loadData() {
-    return {
-      params: 'user',
-    };
+  @Get('getAllUsers')
+  findAll() {
+    return this.userService.findAll();
+  }
+  @Get(':userName')
+  getUserByName(@Param('userName') userName: string) {
+    return this.userService.getUserByName(userName);
+  }
+  @Post('/register')
+  create(@Body() createUserDto: CreateUserDto) {
+    if (!createUserDto.email) {
+      throw new HttpException('验证密码账号', HttpStatus.FORBIDDEN);
+      return false;
+    }
+    return this.userService.register(createUserDto);
   }
 
-  @Get('/getData')
-  loadAll() {
-    return this.userService.loadAll();
+  @Post('login')
+  login(@Body() params: object) {
+    return this.userService.login(params);
+  }
+  @Post('/update')
+  update(@Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(updateUserDto.id, updateUserDto);
   }
 
-  @Get(':id')
-  loadById(@Param() param) {
-    // return param;
-    return this.userService.loadById(param.id);
+  @Delete('/delete')
+  remove(@Param('id') id: string) {
+    return this.userService.remove(id);
   }
 }

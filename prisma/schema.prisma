@@ -6,63 +6,47 @@ generator client {
   previewFeatures = ["referentialIntegrity"]
 }
 
+// 连接本地数据库
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// // 连接plantscale
 // datasource db {
-//   provider = "sqlite"
-//   url      = env("DATABASE_URL")
+//   provider             = "mysql"
+//   url                  = env("DATABASE_URL")
+//   referentialIntegrity = "prisma"
 // }
 
-datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
-}
+model BlogUser {
+  id              String     @id @unique @default(uuid())
+  createdAt       DateTime   @default(now()) @map("created_at")
+  updatedAt       DateTime   @updatedAt @map("updated_at")
+  userName        String     @unique @map("user_name")
+  password        String     @default("")
+  email           String?    @unique @default("")
+  passwordHash    String     @default("")
+  avatarUrl       String?    @default("") @map("avatar_url")
+  avatarUrlBase64 String?    @default("") @map("avatar_url_base64")
+  telephone       String?    @default("")
+  isAdmin         Boolean    @default(false)
+  posts           BlogPost[]
 
-model Link {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-  url       String
-  shortUrl  String
-  userId    String?
-}
-
-model User {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-  name      String?
-  email     String
-}
-
-model user {
-  id        String   @id @unique @default(uuid())
-  userName  String   @unique @map("user_name")
-  password  String   @default("")
-  nickName  String   @default("") @map("nick_name")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  video   video?  @relation(fields: [videoId], references: [id])
-  videoId String?
   @@map("users")
 }
 
-model book {
-  id     String @id @unique @default(uuid())
-  title  String @default("")
-  author String @default("")
-  price  Float  @default(0)
+model BlogPost {
+  id             String   @id @unique @default(uuid())
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  title          String   @default("")
+  content        String   @default("")
+  imageUrl       String?  @default("")
+  imageUrlBase64 String?  @default("")
+  remark         String?  @default("")
+  createUserId   String   @default("") @map("create_user_id")
+  author         BlogUser @relation(fields: [createUserId], references: [id])
 
-  @@map("books")
+  @@map("posts")
 }
-
-model video {
-  id        String   @id @unique @default(uuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  name      String   @default("")
-  url       String   @default("")
-
-  users user[]
-}
-
