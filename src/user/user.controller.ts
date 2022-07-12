@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-06 10:20:55
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-08 17:18:44
+ * @LastEditTime: 2022-07-11 11:56:19
  */
 import {
   Controller,
@@ -29,7 +29,7 @@ export class UserController {
   findAll() {
     return this.userService.findAll();
   }
-  @Get(':userName')
+  @Get('/getUserByName')
   getUserByName(@Param('userName') userName: string) {
     return this.userService.getUserByName(userName);
   }
@@ -42,7 +42,7 @@ export class UserController {
     return this.userService.register(createUserDto);
   }
 
-  @Post('login')
+  @Post('/login')
   login(@Body() params: object) {
     return this.userService.login(params);
   }

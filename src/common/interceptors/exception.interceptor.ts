@@ -3,7 +3,7 @@
  * @Description: desc
  * @Date: 2022-07-08 16:30:56
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-08 16:49:38
+ * @LastEditTime: 2022-07-11 11:48:50
  */
 import {
   CallHandler,
@@ -25,7 +25,7 @@ export class ErrorsInterceptor implements NestInterceptor {
         return {
           data,
           success: true,
-          errorMessage: '',
+          msg: '',
         };
       }),
       catchError((err) =>

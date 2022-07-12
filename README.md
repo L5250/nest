@@ -3,8 +3,10 @@
  * @Description:
  * @Date: 2022-07-01 15:12:40
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-06 15:08:05
+ * @LastEditTime: 2022-07-11 09:44:09
 -->
+`DATABASE_URL="file:./dev.db"`
+
 
 nest-cli 添加
 `"generateOptions": { "spec": false }`
