@@ -3,10 +3,10 @@
  * @Description:
  * @Date: 2022-07-01 15:12:40
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-11 09:44:09
+ * @LastEditTime: 2022-07-13 17:32:13
 -->
-`DATABASE_URL="file:./dev.db"`
 
+`DATABASE_URL="file:./dev.db"`
 
 nest-cli 添加
 `"generateOptions": { "spec": false }`
@@ -40,3 +40,9 @@ npx nest g mi validata-data
 3.npm run build
 4.npx vercle login
 5.npx vercel --prod
+
+#### 发布问题
+修改prisma下的schema.prisma的数据库类型
+每次重新生成prisma
+修改 build 为`"build": "prisma generate && nest build",`
+pun:` "pub": "npm run build && npx vercel --prod "`
