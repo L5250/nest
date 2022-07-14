@@ -1,9 +1,9 @@
 /*
  * @Author: L5250
- * @Description: desc
- * @Date: 2022-07-08 16:30:56
+ * @Description: 拦截器
+ * @Date: 2022-07-14 16:23:41
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-11 11:48:50
+ * @LastEditTime: 2022-07-14 17:20:02
  */
 import {
   CallHandler,
@@ -14,25 +14,22 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class ErrorsInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      // 返回数据格式处理
       map((data) => {
         return {
           data,
           success: true,
-          msg: '',
+          msg: null,
         };
       }),
-      catchError((err) =>
-        throwError(
-          () => new HttpException('New message', HttpStatus.BAD_GATEWAY),
-        ),
-      ),
+      // catchError((err) =>
+      //   throwError(() => new HttpException('err', HttpStatus.BAD_GATEWAY)),
+      // ),
     );
   }
 }
