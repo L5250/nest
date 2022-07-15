@@ -3,14 +3,14 @@
  * @Description:
  * @Date: 2022-07-06 10:20:55
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-14 17:10:50
+ * @LastEditTime: 2022-07-15 17:21:01
  */
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({ description: '用户名' })
-  @IsNotEmpty({ message: '用户名不能为空' })
+  @IsNotEmpty()
   @IsString()
   readonly userName: string;
 
@@ -18,21 +18,27 @@ export class CreateUserDto {
   @IsNotEmpty({ message: '密码不能为空' })
   readonly password: string;
 
-  @ApiProperty({ description: 'email' })
+  @ApiPropertyOptional({ description: 'email' })
+  @IsString()
   readonly email: string;
 
   @ApiProperty({ description: 'passwordHash' })
+  @IsString()
   readonly passwordHash: string;
 
   @ApiProperty({ description: 'avatarUrl' })
+  @IsString()
   readonly avatarUrl: string;
 
   @ApiProperty({ description: 'avatarUrlBase64' })
+  @IsString()
   readonly avatarUrlBase64: string;
 
-  @ApiProperty({ description: 'telephone' })
+  @ApiPropertyOptional({ description: 'telephone' })
+  @IsString()
   readonly telephone: string;
 
   @ApiProperty({ description: '是否管理员', default: false })
+  @IsBoolean()
   readonly isAdmin: boolean;
 }

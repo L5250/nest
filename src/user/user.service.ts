@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-06 10:20:55
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-14 17:24:33
+ * @LastEditTime: 2022-07-15 17:20:01
  */
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -16,36 +16,63 @@ export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll() {
-    return process.env.NODE_ENV;
     return this.prisma.blogUser.findMany({ where: {} });
   }
   // 获取单个user
   async getUserByName(userName: string) {
-    return this.prisma.blogUser.findUnique({ where: { userName } });
+    const data = await this.prisma.blogUser.findUnique({ where: { userName } });
+    if (!data) {
+      throw new HttpException('用户不存在', HttpStatus.FORBIDDEN);
+    }
+    return data;
+  }
+  async findOne(id: string) {
+    const data = await this.prisma.blogUser.findUnique({ where: { id } });
+    if (!data) {
+      throw new HttpException('用户不存在', HttpStatus.FORBIDDEN);
+    }
+    return data;
   }
   // 注册
   async register(createUserDto: CreateUserDto) {
-    return this.prisma.blogUser.create({
-      data: createUserDto,
+    const data = await this.prisma.blogUser.findUnique({
+      where: { userName: createUserDto.userName },
     });
+    console.log(data);
+    if (data) {
+      throw new HttpException('用户已经存在', HttpStatus.FORBIDDEN);
+    } else {
+      console.log(createUserDto);
+      // return createUserDto;
+      const c = this.prisma.blogUser.create({
+        data: createUserDto,
+      });
+      console.log(c);
+      return c;
+    }
   }
   // 更新信息
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async update(updateUserDto: UpdateUserDto) {
+    await this.findOne(updateUserDto.id);
     return this.prisma.blogUser.update({
-      where: { id },
+      where: { id: updateUserDto.id },
       data: updateUserDto,
     });
   }
   // 删除账号
   async remove(id: string) {
-    return this.prisma.blogUser.delete({ where: { id } });
+    console.log(id);
+    // return id;
+    const data = await this.findOne(id);
+    if (!data) {
+      return data;
+    } else {
+      return this.prisma.blogUser.delete({ where: { id } });
+    }
   }
   async login(loginUserDto: LoginUserDto) {
-    // if (!loginUserDto.password) {
-    //   throw new HttpException('验证密码账号', HttpStatus.FORBIDDEN);
-    // }
     const data = await this.getUserByName(loginUserDto.userName);
-    if (data.password !== loginUserDto.password) {
+    if (data && data[0].password !== loginUserDto.password) {
       throw new HttpException('验证密码账号', HttpStatus.FORBIDDEN);
     }
     return data;

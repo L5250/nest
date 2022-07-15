@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-01 15:12:40
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-14 17:00:15
+ * @LastEditTime: 2022-07-15 11:05:06
  */
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
@@ -16,9 +16,9 @@ import { ErrorsInterceptor } from './common/interceptors/exception.interceptor';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalInterceptors(new ErrorsInterceptor()); // 使用自定义的全局拦截器
   app.useGlobalFilters(new HttpExceptionFilter()); // 对所有异常处理
-  app.useGlobalPipes(new ValidationPipe()); // 使用dto验证
+  app.useGlobalInterceptors(new ErrorsInterceptor()); // 使用自定义的全局拦截器
+  app.useGlobalPipes(new ValidationPipe()); // 使用dto验证 全局验证管道
   app.enableCors({ origin: true, credentials: true }); // 允许跨域和传递cookie
 
   // app.useGlobalPipes(new ValidationPipe()); // 使用验证

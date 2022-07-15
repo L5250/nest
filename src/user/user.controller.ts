@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-06 10:20:55
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-14 17:01:25
+ * @LastEditTime: 2022-07-15 17:18:00
  */
 import {
   Controller,
@@ -51,7 +51,7 @@ export class UserController {
   @ApiOperation({ summary: '更新用户信息' })
   @Post('/update')
   update(@Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(updateUserDto.id, updateUserDto);
+    return this.userService.update(updateUserDto);
   }
 
   @ApiOperation({ summary: '登录' })
@@ -61,7 +61,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: '删除账号' })
-  @Delete('/delete')
+  @Delete('/delete:id')
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
   }

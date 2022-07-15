@@ -3,7 +3,7 @@
  * @Description: 拦截器
  * @Date: 2022-07-14 16:23:41
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-14 17:20:02
+ * @LastEditTime: 2022-07-15 10:56:50
  */
 import {
   CallHandler,
@@ -28,7 +28,7 @@ export class ErrorsInterceptor implements NestInterceptor {
         };
       }),
       // catchError((err) =>
-      //   throwError(() => new HttpException('err', HttpStatus.BAD_GATEWAY)),
+      //   throwError(() => new HttpException(err, HttpStatus.BAD_GATEWAY)),
       // ),
     );
   }
