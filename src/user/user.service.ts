@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-06 10:20:55
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-15 17:20:01
+ * @LastEditTime: 2022-07-15 17:29:57
  */
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -72,7 +72,7 @@ export class UserService {
   }
   async login(loginUserDto: LoginUserDto) {
     const data = await this.getUserByName(loginUserDto.userName);
-    if (data && data[0].password !== loginUserDto.password) {
+    if (data && data.password !== loginUserDto.password) {
       throw new HttpException('验证密码账号', HttpStatus.FORBIDDEN);
     }
     return data;
