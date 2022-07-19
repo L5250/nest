@@ -6,19 +6,19 @@ generator client {
   previewFeatures = ["referentialIntegrity"]
 }
 
-// // 连接本地数据库
-// datasource db {
-//   provider = "sqlite"
-//   // url      = env("DATABASE_URL")
-//   url      = "file:./dev.db"
-// }
-
-// 连接plantscale
+// 连接本地数据库
 datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+  provider = "sqlite"
+  // url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
+
+// // 连接plantscale
+// datasource db {
+//   provider             = "mysql"
+//   url                  = env("DATABASE_URL")
+//   referentialIntegrity = "prisma"
+// }
 
 model BlogUser {
   id              String     @id @unique @default(uuid())

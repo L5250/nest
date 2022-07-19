@@ -35,4 +35,7 @@ export class CreateUserDto {
 
   @ApiProperty({ description: '是否管理员', default: false })
   readonly isAdmin: boolean;
+
+  @ApiProperty({ description: '描述' })
+  readonly description: string;
 }
