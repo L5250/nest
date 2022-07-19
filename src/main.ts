@@ -3,9 +3,9 @@
  * @Description:
  * @Date: 2022-07-01 15:12:40
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-15 11:05:06
+ * @LastEditTime: 2022-07-18 10:52:59
  */
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as cookieParse from 'cookie-parser';
@@ -36,9 +36,6 @@ async function bootstrap() {
 
   await app.listen(3000);
   console.log(`Application is running on: ${await app.getUrl()}`);
-  console.log('服务已启动，访问：✈🍪  🍪  🍪  🍪   🍪✈  http://localhost:3000');
-  console.log(
-    '访问文档    访问：✈🍪  🍪  🍪  🍪   🍪✈  http://localhost:3000/doc',
-  );
+  Logger.log('http://localhost:3000/doc');
 }
 bootstrap();

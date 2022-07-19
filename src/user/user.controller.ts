@@ -3,29 +3,36 @@
  * @Description:
  * @Date: 2022-07-06 10:20:55
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-15 17:18:00
+ * @LastEditTime: 2022-07-19 16:47:09
  */
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  HttpException,
-  HttpStatus,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthService } from 'src/auth/auth.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
+import { Public } from 'src/common/decorators/public.decorator';
+import { CreateUserDto } from './dto/create-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UserService } from './user.service';
 
 @ApiTags('user') // 接口分类
+// @UseGuards(LocalAuthGuard)
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private authService: AuthService,
+  ) {}
 
   @ApiOperation({ summary: '获取所有用户' }) // 文档上的接口描述
   @Get('getAllUsers')
@@ -41,10 +48,8 @@ export class UserController {
 
   @ApiOperation({ summary: '注册-创建新账号' })
   @Post('/register')
+  @Public()
   create(@Body() createUserDto: CreateUserDto) {
-    if (!createUserDto.email) {
-      return false;
-    }
     return this.userService.register(createUserDto);
   }
 
@@ -56,13 +61,26 @@ export class UserController {
 
   @ApiOperation({ summary: '登录' })
   @Post('/login')
+  @Public()
   login(@Body() loginUserDto: LoginUserDto) {
-    return this.userService.login(loginUserDto);
+    return this.authService.login(loginUserDto);
   }
 
   @ApiOperation({ summary: '删除账号' })
-  @Delete('/delete:id')
-  remove(@Param('id') id: string) {
+  @Post('/delete')
+  remove(@Body('id') id: string) {
+    console.log(id);
+    // return id;
     return this.userService.remove(id);
+  }
+
+  @ApiOperation({ summary: '验证token是否过期' })
+  @Get('/validateToken')
+  validateToken(@Request() req) {
+    console.log(req.user.userName);
+    // 未过期
+    if (req.user) {
+      return this.userService.findOne(req.user.userId);
+    }
   }
 }

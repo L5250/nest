@@ -32,6 +32,7 @@ model BlogUser {
   avatarUrlBase64 String?    @default("") @map("avatar_url_base64")
   telephone       String?    @default("")
   isAdmin         Boolean    @default(false)
+  description     String?    @default("")
   posts           BlogPost[]
 
   @@map("users")
