@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-06 10:20:55
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-19 16:47:09
+ * @LastEditTime: 2022-07-28 10:59:30
  */
 import {
   Body,
@@ -15,7 +15,7 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
@@ -27,6 +27,7 @@ import { UserService } from './user.service';
 
 @ApiTags('user') // 接口分类
 // @UseGuards(LocalAuthGuard)
+@ApiBearerAuth()
 @Controller('user')
 export class UserController {
   constructor(
@@ -53,17 +54,17 @@ export class UserController {
     return this.userService.register(createUserDto);
   }
 
-  @ApiOperation({ summary: '更新用户信息' })
-  @Post('/update')
-  update(@Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(updateUserDto);
-  }
-
   @ApiOperation({ summary: '登录' })
   @Post('/login')
   @Public()
   login(@Body() loginUserDto: LoginUserDto) {
     return this.authService.login(loginUserDto);
+  }
+
+  @ApiOperation({ summary: '更新用户信息' })
+  @Post('/update')
+  update(@Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(updateUserDto);
   }
 
   @ApiOperation({ summary: '删除账号' })
@@ -82,5 +83,11 @@ export class UserController {
     if (req.user) {
       return this.userService.findOne(req.user.userId);
     }
+  }
+
+  @ApiOperation({ summary: '保存个人信息' })
+  @Post('/saveUserInfo')
+  saveUserInfo(@Body() body: UpdateUserDto) {
+    return this.userService.saveUserInfo(body);
   }
 }

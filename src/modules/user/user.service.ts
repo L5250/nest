@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-06 10:20:55
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-19 17:11:33
+ * @LastEditTime: 2022-07-21 17:21:11
  */
 import { Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -106,4 +106,12 @@ export class UserService {
   //   }
   //   return data;
   // }
+  /**
+   * 保存个人信息
+   */
+  async saveUserInfo(body: UpdateUserDto) {
+    const data = await this.update(body);
+    console.log(data);
+    return data;
+  }
 }

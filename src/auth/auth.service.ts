@@ -3,14 +3,21 @@
  * @Description: desc
  * @Date: 2022-07-18 11:18:07
  * @LastEditors: L5250
+ * @LastEditTime: 2022-07-28 11:03:33
+ */
+/*
+ * @Author: L5250
+ * @Description: desc
+ * @Date: 2022-07-18 11:18:07
+ * @LastEditors: L5250
  * @LastEditTime: 2022-07-19 17:06:04
  */
 import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { LoginUserDto } from 'src/user/dto/login-user.dto';
-import { UserService } from 'src/user/user.service';
+import { LoginUserDto } from 'src/modules/user/dto/login-user.dto';
+import { UserService } from 'src/modules/user/user.service';
 @Injectable()
 export class AuthService {
   constructor(

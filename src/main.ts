@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-01 15:12:40
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-18 10:52:59
+ * @LastEditTime: 2022-07-28 11:05:16
  */
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
@@ -30,6 +30,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('user', '333')
     .addTag('post', '123')
+    .addBearerAuth() // 在控制器加上@ApiBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('doc', app, document);
