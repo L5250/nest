@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-01 15:12:40
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-13 17:32:13
+ * @LastEditTime: 2022-08-02 16:21:03
 -->
 
 `DATABASE_URL="file:./dev.db"`
@@ -45,4 +45,11 @@ npx nest g mi validata-data
 修改prisma下的schema.prisma的数据库类型
 每次重新生成prisma
 修改 build 为`"build": "prisma generate && nest build",`
-pun:` "pub": "npm run build && npx vercel --prod "`
+pub:` "pub": "npm run build && npx vercel --prod "`
+
+
+### 多个环境env
+使用不同的env文件
+`dotenv -e .env`
+`dotenv -e .env.local`
+

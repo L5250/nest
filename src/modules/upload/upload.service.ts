@@ -7,7 +7,7 @@
  */
 import { Injectable } from '@nestjs/common';
 // import { tar } from 'compressing';
-import { ConfigService } from 'nestjs-config';
+import { ConfigService } from '@nestjs/config';
 import { CreateUploadDto } from './dto/create-upload.dto';
 import { UpdateUploadDto } from './dto/update-upload.dto';
 

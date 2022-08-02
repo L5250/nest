@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-01 15:12:40
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-28 17:08:36
+ * @LastEditTime: 2022-07-29 15:35:54
  */
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { PostModule } from './modules/post/post.module';
@@ -16,16 +16,18 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { UploadModule } from './modules/upload/upload.module';
-import { ConfigModule, ConfigService } from 'nestjs-config';
-import { resolve } from 'path';
+import { ConfigModule } from '@nestjs/config';
+import file from './config/file';
+import app from './config/app';
+import database from './config/database';
 
 @Module({
   imports: [
-    ConfigModule.load(resolve(__dirname, 'config', '**/!(*.d).{ts,js}')),
-    // MailerModule.forRootAsync({
-    //   useFactory: (config: ConfigService) => config.get('email'),
-    //   inject: [ConfigService],
-    // }),
+    ConfigModule.forRoot({
+      //全局模块
+      isGlobal: true,
+      load: [app, database, file],
+    }),
     UserModule,
     PostModule,
     AuthModule,

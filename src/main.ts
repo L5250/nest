@@ -3,18 +3,25 @@
  * @Description:
  * @Date: 2022-07-01 15:12:40
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-28 11:05:16
+ * @LastEditTime: 2022-08-02 17:18:50
  */
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as cookieParse from 'cookie-parser';
+import { join } from 'path';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { ErrorsInterceptor } from './common/interceptors/exception.interceptor';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // 配置静态资源
+  app.useStaticAssets(join(__dirname, '../uploads'), {
+    prefix: '/uploads',
+  });
 
   app.useGlobalFilters(new HttpExceptionFilter()); // 对所有异常处理
   app.useGlobalInterceptors(new ErrorsInterceptor()); // 使用自定义的全局拦截器
@@ -28,7 +35,7 @@ async function bootstrap() {
     .setTitle('API文档')
     .setDescription('这是接口文档描述')
     .setVersion('1.0')
-    .addTag('user', '333')
+    .addTag('user', '用户接口')
     .addTag('post', '123')
     .addBearerAuth() // 在控制器加上@ApiBearerAuth()
     .build();

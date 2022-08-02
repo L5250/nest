@@ -3,17 +3,20 @@
  * @Description: desc
  * @Date: 2022-07-28 15:43:28
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-28 16:59:23
+ * @LastEditTime: 2022-07-29 16:33:20
  */
 import { Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
-import { ConfigService } from 'nestjs-config';
+import { ConfigService } from '@nestjs/config';
 import { UploadController } from './upload.controller';
 import { UploadService } from './upload.service';
+
 @Module({
   imports: [
     MulterModule.registerAsync({
-      useFactory: (config: ConfigService) => config.get('file'),
+      useFactory: async (configService: ConfigService) => ({
+        ...configService.get('file'),
+      }),
       inject: [ConfigService],
     }),
   ],

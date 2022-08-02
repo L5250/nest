@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-06 10:20:55
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-21 17:21:11
+ * @LastEditTime: 2022-08-02 16:01:18
  */
 import { Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -70,14 +70,26 @@ export class UserService {
    更新用户信息 
   */
   async update(body: UpdateUserDto) {
-    await this.findOne(body.id);
-    // 生成hash密码
-    const password = body.password;
-    const hash = await bcrypt.hash(password, saltOrRounds);
-    return this.prisma.blogUser.update({
-      where: { id: body.id },
-      data: { ...body, password: hash },
-    });
+    const user = await this.findOne(body.id);
+    // 更改用户名后验证用户名是否重复
+    let isRepect = false;
+    if (user.userName !== body.userName) {
+      isRepect = !!(await this.prisma.blogUser.findUnique({
+        where: { userName: body.userName },
+      }));
+    }
+
+    if (isRepect) {
+      throw new HttpException('账号名已存在', HttpStatus.FORBIDDEN);
+    } else {
+      // 生成hash密码
+      const password = body.password;
+      const hash = await bcrypt.hash(password, saltOrRounds);
+      return this.prisma.blogUser.update({
+        where: { id: body.id },
+        data: { ...body, password: hash },
+      });
+    }
   }
   /*
    删除账号 

@@ -3,7 +3,7 @@
  * @Description: desc
  * @Date: 2022-07-28 15:43:28
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-28 17:24:20
+ * @LastEditTime: 2022-08-02 10:48:46
  */
 import {
   Controller,
@@ -51,14 +51,17 @@ export class UploadController {
   @Post('/avatar')
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description: 'List of cats',
+    description: '上传头像图片',
     type: FileUploadDto,
   })
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     console.log(file, 'file');
+    // 这里的 file 已经是保存后的文件信息了，在此处做数据库处理，或者直接返回保存后的文件信息
 
+    const url = `http://localhost:3000/uploads/${file.filename}`;
     return {
       // body,
+      url,
       file,
     };
   }
