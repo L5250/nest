@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-01 15:12:40
  * @LastEditors: L5250
- * @LastEditTime: 2022-08-02 16:21:03
+ * @LastEditTime: 2022-08-03 15:37:42
 -->
 
 `DATABASE_URL="file:./dev.db"`
@@ -42,14 +42,54 @@ npx nest g mi validata-data
 5.npx vercel --prod
 
 #### 发布问题
-修改prisma下的schema.prisma的数据库类型
-每次重新生成prisma
+
+修改 prisma 下的 schema.prisma 的数据库类型
+每次重新生成 prisma
 修改 build 为`"build": "prisma generate && nest build",`
 pub:` "pub": "npm run build && npx vercel --prod "`
 
+### 多个环境 env
 
-### 多个环境env
-使用不同的env文件
+使用不同的 env 文件
 `dotenv -e .env`
 `dotenv -e .env.local`
 
+### 关于 prisma
+
+##### 从头开始，连接新数据库
+
+plantscale 为例
+``
+generator client {
+provider = "prisma-client-js"
+previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+provider = "mysql"
+url = env("DATABASE_URL")
+referentialIntegrity = "prisma"
+}
+``
+
+schema.prisma 中添加 model 运行`npx prisma migrate dev --name init`将数据模型映射到数据库架构，将清除数据库所以内容
+
+###### 连接现有数据库
+
+plantscale 为例
+`
+generator client {
+provider = "prisma-client-js"
+previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+provider = "mysql"
+url = env("DATABASE_URL")
+referentialIntegrity = "prisma"
+}
+`
+
+1.`npx prisma db pull`拉取已有的数据架构，并修改 schame 的 model;
+
+2.`npx prisma db push`推送本地 model 到数据库创建修改表

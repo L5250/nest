@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-01 15:12:40
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-29 15:35:54
+ * @LastEditTime: 2022-08-03 11:44:47
  */
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { PostModule } from './modules/post/post.module';
