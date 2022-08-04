@@ -16,13 +16,15 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "------------------": "-----------------------------------------------------------",
-    "start": "nest start --watch",
+    "start": "npm run gen && nest start --watch",
     "start:dev": "nest start --watch",
-    "start:prod": "dotenv -e .env.prod nest start --watch",
-    "build": "prisma generate && nest build",
-    "build:prod": "dotenv -e .env.prod nest build",
+    "start:prod": "npm run gen:prod && dotenv -e .env.prod nest start --watch",
+    "gen": "prisma generate",
+    "gen:prod": "dotenv -e .env.prod prisma generate",
+    "build": "npm run gen && nest build",
+    "build:prod": "npm run gen:prod && dotenv -e .env.prod nest build",
     "pub": "npm run build && npx vercel",
-    "pub:prod": "dotenv -e .env.prod npx vercel --prod"
+    "pub:prod": "npm run gen:prod && build:prod && dotenv -e .env.prod npx vercel --prod"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.3",

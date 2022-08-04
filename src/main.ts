@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-01 15:12:40
  * @LastEditors: L5250
- * @LastEditTime: 2022-08-03 16:59:06
+ * @LastEditTime: 2022-08-04 09:41:29
  */
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
@@ -14,7 +14,6 @@ import { join } from 'path';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { ErrorsInterceptor } from './common/interceptors/exception.interceptor';
-import { LoggerMiddleware } from './common/middleware/logger.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -31,9 +30,6 @@ async function bootstrap() {
 
   // app.useGlobalPipes(new ValidationPipe()); // 使用验证
   // app.use(cookieParse()); // 使用cookies格式化插件
-
-  //  全局使用中间件
-  app.use(LoggerMiddleware);
 
   const config = new DocumentBuilder()
     .setTitle('API文档')

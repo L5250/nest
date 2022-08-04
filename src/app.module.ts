@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-01 15:12:40
  * @LastEditors: L5250
- * @LastEditTime: 2022-08-03 11:44:47
+ * @LastEditTime: 2022-08-04 09:44:46
  */
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { PostModule } from './modules/post/post.module';
@@ -20,6 +20,7 @@ import { ConfigModule } from '@nestjs/config';
 import file from './config/file';
 import app from './config/app';
 import database from './config/database';
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
 
 @Module({
   imports: [
@@ -44,9 +45,14 @@ import database from './config/database';
     },
   ],
 })
-export class AppModule {}
+// export class AppModule {}
 // export class AppModule implements NestModule {
 //   configure(consumer: MiddlewareConsumer) {
 //     consumer.apply(ValidataDataMiddleware).forRoutes(...['movies']);
 //   }
 // }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

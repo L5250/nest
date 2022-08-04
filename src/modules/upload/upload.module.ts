@@ -3,13 +3,14 @@
  * @Description: desc
  * @Date: 2022-07-28 15:43:28
  * @LastEditors: L5250
- * @LastEditTime: 2022-07-29 16:33:20
+ * @LastEditTime: 2022-08-04 10:49:02
  */
 import { Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
 import { UploadController } from './upload.controller';
 import { UploadService } from './upload.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
   imports: [
@@ -21,6 +22,6 @@ import { UploadService } from './upload.service';
     }),
   ],
   controllers: [UploadController],
-  providers: [UploadService],
+  providers: [UploadService, PrismaService],
 })
 export class UploadModule {}

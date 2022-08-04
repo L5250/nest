@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-01 15:12:40
  * @LastEditors: L5250
- * @LastEditTime: 2022-08-03 15:37:42
+ * @LastEditTime: 2022-08-04 09:56:25
 -->
 
 `DATABASE_URL="file:./dev.db"`
@@ -93,3 +93,14 @@ referentialIntegrity = "prisma"
 1.`npx prisma db pull`拉取已有的数据架构，并修改 schame 的 model;
 
 2.`npx prisma db push`推送本地 model 到数据库创建修改表
+
+### localtunnel
+
+###### 本地端口映射
+
+全局安装
+`npm install -g localtunnel`
+快速开始
+`npx localtunnel --port 8000`
+自定义域名
+`npx localtunnel --port 8000 --subdomain \*\*`
