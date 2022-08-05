@@ -3,7 +3,7 @@
  * @Description: desc
  * @Date: 2022-07-28 15:43:28
  * @LastEditors: L5250
- * @LastEditTime: 2022-08-04 10:49:02
+ * @LastEditTime: 2022-08-05 16:47:31
  */
 import { Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
@@ -16,6 +16,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
   imports: [
     MulterModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
+        // 需要在appModule  load引入
         ...configService.get('file'),
       }),
       inject: [ConfigService],
