@@ -15,6 +15,7 @@ import {
   Delete,
   UploadedFile,
   UseInterceptors,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { FtpuploadService } from './ftpupload.service';
 import { CreateFtpuploadDto } from './dto/create-ftpupload.dto';
@@ -41,6 +42,8 @@ export class FtpuploadController {
     type: FileUploadDto,
   })
   uploadAvatar(@Body() data: any, @UploadedFile() file: Express.Multer.File) {
+    // async uploadIcon(@UploadedFile() file: Express.Multer.File) {
+
     return this.ftpuploadService.ftpUploadAvatar(data, file);
   }
 

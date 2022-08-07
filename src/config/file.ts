@@ -23,15 +23,18 @@ import { diskStorage } from 'multer';
 // };
 export default () => ({
   file: {
-    // dest: './upload',
+    dest: './upload',
     storage: diskStorage({
       // destination: join(
       //   __dirname,
       //   `../uploads/${new Date().toLocaleDateString()}`,
       // ),
       //文件储存位置
-      destination: `uploads`,
+      destination: (req, file, cb) => {
+        console.log(req.body, file, cb);
+      },
       filename: (req, file, cb) => {
+        console.log(file);
         const filename = `${new Date().getTime()}.${
           file.mimetype.split('/')[1]
         }`;

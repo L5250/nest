@@ -96,7 +96,7 @@ referentialIntegrity = "prisma"
 
 ### localtunnel
 
-###### 本地端口映射
+###### 本地端口映射d到外网 插件：localtunnel
 
 全局安装
 `npm install -g localtunnel`
