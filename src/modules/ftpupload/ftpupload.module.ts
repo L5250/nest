@@ -14,28 +14,8 @@ import { MulterModule } from '@nestjs/platform-express';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
-  // imports: [
-  //   FtpModule.forRootFtpAsync({
-  //     useFactory: async () => {
-  //       return {
-  //         host: '5250.orgfree.com',
-  //         user: '5250.orgfree.com',
-  //         password: '915016964luo',
-  //         // 此配置会验证证书
-  //         // secure: true,
-  //       };
-  //     },
-  //     inject: [ConfigService],
-  //   }),
-  // ],
   imports: [
-    // MulterModule.registerAsync({
-    //   useFactory: async (configService: ConfigService) => ({
-    //     // 需要在appModule  load引入
-    //     ...configService.get('file'),
-    //   }),
-    //   inject: [ConfigService],
-    // }),
+    // 获取ftp配置
     FtpModule.forRootFtpAsync({
       useFactory: async (configService: ConfigService) => ({
         ...configService.get('ftp'),

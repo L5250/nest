@@ -3,7 +3,7 @@
  * @Description:
  * @Date: 2022-07-01 15:12:40
  * @LastEditors: L5250
- * @LastEditTime: 2022-08-05 16:46:51
+ * @LastEditTime: 2022-08-08 16:15:47
  */
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { PostModule } from './modules/post/post.module';
@@ -22,6 +22,7 @@ import app from './config/app';
 import database from './config/database';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { FtpuploadModule } from './modules/ftpupload/ftpupload.module';
+import { QnUploadsModule } from './modules/qnuploads/qnuploads.module';
 import ftp from './config/ftp';
 
 @Module({
@@ -36,6 +37,7 @@ import ftp from './config/ftp';
     AuthModule,
     UploadModule,
     FtpuploadModule,
+    QnUploadsModule,
   ],
   controllers: [AppController],
   providers: [

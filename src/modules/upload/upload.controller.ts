@@ -38,7 +38,7 @@ class FileUploadDto {
 }
 
 @Controller('upload')
-@ApiTags('upload') // 接口分类
+@ApiTags('本地上传文件，文件保存在本地路径uploads') // 接口分类
 @ApiBearerAuth()
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
