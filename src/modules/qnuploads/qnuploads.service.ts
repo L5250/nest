@@ -3,7 +3,7 @@
  * @Description: desc
  * @Date: 2022-08-08 16:10:08
  * @LastEditors: L5250
- * @LastEditTime: 2022-08-08 17:31:04
+ * @LastEditTime: 2022-08-09 15:43:17
  */
 import {
   HttpException,
@@ -69,25 +69,35 @@ export class QnUploadsService {
 
   // 社区SDK
   async qnUpload(data: CreateQnUploadDto, file: Express.Multer.File) {
-    const fileName = `${data.id}/avatar/avatar.jpeg`;
+    // const fileName = `${data.id}/avatar/avatar.jpeg?x=${new Date().getTime()}`;
+    const fileName = `${data.id}/avatar`;
     const client = qn.create({
       // ak
       accessKey: process.env.QINIU_ACCESSKEY,
       // sk
       secretKey: process.env.QINIU_SECRETKEY,
+      // scope 一般指文件要上传到的目标存储空间（Bucket）。
+      // 若为”Bucket”，表示限定只能传到该Bucket（仅限于新增文件）；若为”Bucket:Key”，表示限定特定的文件，可修改该文件。
       // 仓库
+      // 只可以新增，重复会报错
       bucket: process.env.QINIU_BUCKET,
+      /**
+       * 覆盖上传后更新
+       */
+      // bucket: process.env.QINIU_BUCKET + ':' + fileName,
       // host
       origin: process.env.QINIU_HOST,
       uploadURL: 'http://up-z2.qiniup.com/',
       // timeout: 3600000, // default rpc timeout: one hour, optional
-      // if your app outside of China, please set `uploadURL` to `http://up.qiniug.com/`
-      // uploadURL: 'http://up.qiniu.com/',
     });
     client.list(fileName, (error, res) => {
       console.log(res);
       if (res.items && res.items.length > 0) {
-        client.delete(fileName, (e) => {
+        console.log(res);
+        // return res;
+        // 删除上一张的图片
+        client.delete(res.items[0].key, (e) => {
+          // 新增一张
           uu();
         });
       } else {
@@ -98,7 +108,8 @@ export class QnUploadsService {
       client.upload(
         file.buffer,
         {
-          key: fileName,
+          // key: fileName,
+          key: `${fileName}/${new Date().getTime()}.jpeg`,
         },
         async (err, result) => {
           console.log(result, 'err');
@@ -107,14 +118,19 @@ export class QnUploadsService {
           } else {
             // 更新user数据
             console.log(result.url);
-            this.prisma.blogUser.update({
-              where: { id: data.id },
-              data: { avatarUrl: result.url },
-            });
+            await this.updateUser(data, result);
           }
         },
       );
     };
+  }
+
+  async updateUser(data: CreateQnUploadDto, result: { url: any }) {
+    await this.prisma.blogUser.update({
+      where: { id: data.id },
+      data: { avatarUrl: `http://${result.url}` },
+    });
+    return true;
   }
 
   // 上传头像
