@@ -44,7 +44,10 @@ export class QnUploadsService {
     return new Promise((_res, _rej) => {
       formUploader.put(
         uploadToken,
-        `${Date.now()}-${file.originalname}`,
+        // `${Date.now()}-${file.originalname}`,
+        `${data.id}/avatar/${new Date().getTime()}.${
+          file.mimetype.split('/')[1]
+        }`,
         file.buffer,
         new qiniu.form_up.PutExtra(),
         (respErr, respBody, respInfo) => {
@@ -52,16 +55,16 @@ export class QnUploadsService {
             // console.error(respErr);
             throw new InternalServerErrorException(respErr.message);
           }
+          console.log(respInfo);
+          console.log(respBody);
           if (respInfo.statusCode == 200) {
             console.log(respBody.key);
+            const url = `http://${process.env.QINIU_HOST}/${respBody.key}`;
             _res({
               // url: new url.URL(respBody.key, process.env.QINIU_HOST).href,
-              url: `http://${process.env.QINIU_HOST}/${respBody.key}`,
+              url,
             });
-            this.updateUser(
-              data,
-              `http://${process.env.QINIU_HOST}/${respBody.key}`,
-            );
+            this.updateUser(data, url);
           } else {
             // console.error(respInfo.statusCode, respBody);
             throw new InternalServerErrorException(respInfo);
@@ -73,7 +76,7 @@ export class QnUploadsService {
 
   // // 社区SDK
   // async qnUpload(data: CreateQnUploadDto, file: Express.Multer.File) {
-  //   // const fileName = `${data.id}/avatar/avatar.jpeg?x=${new Date().getTime()}`;
+  //   // const fileName = `${data.id}/avatar/avatar.${file.mimetype.split('/')[1]}?x=${new Date().getTime()}`;
   //   const fileName = `${data.id}/avatar`;
   //   const client = qn.create({
   //     // ak
@@ -94,52 +97,58 @@ export class QnUploadsService {
   //     uploadURL: 'http://up-z2.qiniup.com/',
   //     // timeout: 3600000, // default rpc timeout: one hour, optional
   //   });
-  //   client.list(fileName, (error, res) => {
-  //     console.log(res);
-  //     if (res.items && res.items.length > 0) {
-  //       console.log(res);
-  //       // return res;
-  //       // 删除上一张的图片
-  //       client.delete(res.items[0].key, (e) => {
-  //         // 新增一张
+
+  //   return new Promise((_res, _rej) => {
+  //     client.list(fileName, (error, res) => {
+  //       if (res.items && res.items.length > 0) {
+  //         // 删除上一张的图片
+  //         client.delete(res.items[0].key, (e) => {
+  //           // 新增一张
+  //           uu();
+  //         });
+  //       } else {
   //         uu();
-  //       });
-  //     } else {
-  //       uu();
-  //     }
+  //       }
+  //     });
+  //     const uu = () => {
+  //       client.upload(
+  //         file.buffer,
+  //         {
+  //           // key: fileName,
+  //           key: `${fileName}/${new Date().getTime()}.${
+  //             file.mimetype.split('/')[1]
+  //           }`,
+  //         },
+  //         async (err, result) => {
+  //           console.log(result, 'err');
+  //           if (err) {
+  //             throw new HttpException(result.error, HttpStatus.FORBIDDEN);
+  //           } else {
+  //             // 更新user数据
+  //             console.log(result.url);
+  //             await this.updateUser(data, `http://${result.url}`);
+  //             _res(true);
+  //           }
+  //         },
+  //       );
+  //     };
   //   });
-  //   const uu = () => {
-  //     client.upload(
-  //       file.buffer,
-  //       {
-  //         // key: fileName,
-  //         key: `${fileName}/${new Date().getTime()}.jpeg`,
-  //       },
-  //       async (err, result) => {
-  //         console.log(result, 'err');
-  //         if (err) {
-  //           throw new HttpException(result.error, HttpStatus.FORBIDDEN);
-  //         } else {
-  //           // 更新user数据
-  //           console.log(result.url);
-  //           await this.updateUser(data, `http://${result.url}`);
-  //         }
-  //       },
-  //     );
-  //   };
   // }
 
-  async updateUser(data: CreateQnUploadDto, url: any) {
-    await this.prisma.blogUser.update({
+  async updateUser(data: CreateQnUploadDto, url: string) {
+    console.log(data, url);
+    const a = await this.prisma.blogUser.update({
       where: { id: data.id },
       data: { avatarUrl: url },
     });
-    return true;
+    console.log(a);
   }
 
   // 上传头像
   async qiniuUploadAvatar(data: CreateQnUploadDto, file: Express.Multer.File) {
+    // 返回一个promise在上传完毕后刷新头像
     const a: any = await this.qiniuUpload(data, file);
-    // this.qnUpload(data, file);
+    // const a = await this.qnUpload(data, file);
+    console.log(a);
   }
 }
